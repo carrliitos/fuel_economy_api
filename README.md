@@ -7,6 +7,12 @@ To execute, run the below commands:
 rstudioapi::jobRunScript(here::here("execute.R"))
 ```
 
+If RStudio is not running, open an R terminal and run the following:
+
+```{r}
+source(here::here("execute.R"))
+```
+
 ## Structure
 The project contains the following general structure:
 
