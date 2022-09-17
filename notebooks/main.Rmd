@@ -1,5 +1,5 @@
 ---
-title: "Project Name"
+title: "API Use in R"
 output: 
   html_notebook:
     code_folding: show
@@ -23,4 +23,12 @@ cat(chunks, sep = "\n")
 ```
 
 # Project Overview
-Description goes here.
+Practicing API calls in R. The API URLs used here does not need any 
+authorization token. However, for the future, some URLs may need an 
+authorization token.
+
+```{r child = "01_fuel_economy_api.Rmd"}
+```
+
+```{r child = "02_vehicle_information.Rmd"}
+```
