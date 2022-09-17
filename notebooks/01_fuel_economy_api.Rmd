@@ -1,0 +1,57 @@
+---
+title: "Fuel Economy API Practice"
+author: "Benzon Carlitos Salazar"
+date: "September 16, 2022"
+---
+
+<style>
+.main-container {
+    width: 100%;
+    max-width: unset;
+}
+</style>
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+# install.packages(c("httr", "jsonlite"))
+library(magrittr)
+```
+
+# Example 1: Fuel Prices
+
+## build URLs
+
+```{r build_urls}
+base_url <- "www.fueleconomy.gov/ws/rest/"
+info_url <- "fuelprices"
+
+full_url <- paste0(base_url, info_url)
+```
+
+## Call API
+
+```{r api_call}
+api_call <- httr::GET(full_url)
+
+names(api_call)
+str(api_call)
+```
+
+## API Response
+
+```{r api_response}
+if (api_call$status_code == 200) {
+	print("Successful connection!")
+}
+
+api_call$content
+```
+
+## Convert response to usable data
+
+```{r readable}
+api_char <- rawToChar(api_call$content)
+
+apiJSON <- jsonlite::fromJSON(api_char, flatten = TRUE)
+names(apiJSON)
+str(apiJSON)
+```

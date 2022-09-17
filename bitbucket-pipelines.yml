@@ -1,0 +1,26 @@
+image: rocker/verse
+
+definitions:
+  caches:
+    renv: ~/.local/share/renv
+    renv-local: renv/library
+  steps:
+    - step: &build-package
+        name: Build and Package
+        caches:
+          - renv
+          - renv-local
+        script:
+          - R -e 'renv::restore()'
+          - R -e 'if ("testthat" %in% installed.packages()[, "Package"]) { dir.create("test-results"); options(testthat.output_file = "test-results/test-results.xml"); devtools::test(reporter = "junit") }'
+          - R -e 'if (!"lintr" %in% installed.packages()[, "Package"]) { renv::install("lintr") }; renv_files <- grep("^\\./renv/", dir(recursive = TRUE, full.names = TRUE), value = TRUE); lints <- lintr::lint_dir(exclusions = setNames(as.list(rep.int(Inf, length(renv_files))), renv_files)); print(lints); quit(save = "no", status = length(lints))'
+
+pipelines:
+  custom:
+    build:
+      - step: *build-package
+        trigger: manual
+  default:
+    - step:
+        <<: *build-package
+        name: Build and Package Current
